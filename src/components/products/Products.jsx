@@ -9,6 +9,8 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import api from "../../services/api";
 import moment from 'moment';
+import 'moment/min/locales';
+// import 'moment/src/locale/pt-br';
 
 const useStyles = makeStyles({
   table: {
@@ -18,19 +20,19 @@ const useStyles = makeStyles({
 
 
 
+
 export default function SimpleTable() {
   const classes = useStyles();
   const [products, setProducts] = useState([]);
   const [test, setTest] = useState([]);
 
-
   useEffect(() => {
     async function loadItems() {
       const response = await api.get("/table");
-
+      
       setProducts(response.data.contracts);
       setTest(response.data.days);
-
+      
     }
     loadItems();
   }, []);
@@ -41,15 +43,16 @@ export default function SimpleTable() {
       //     )
       //   ]);
       
+      // moment.locale('pt-br')
       console.log('OPA',products);
       console.log('OPA2',test);
       // console.log(new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRA' }).format(products.value_global));
-
+      
       // const array3= [...products,...test];
       // const today = moment();
       // console.log(array3);
-  return (
-    <TableContainer component={Paper}>
+      return (
+        <TableContainer component={Paper}>
       <Table className={classes.table} aria-label="simple table">
         <TableHead>
           <TableRow>
@@ -75,7 +78,9 @@ export default function SimpleTable() {
               <TableCell align="justify">{product.object}</TableCell>
               <TableCell align="right">{product.finish_date}</TableCell>
 
-                <TableCell align="right">{moment(product.finish_date,"DD/MM/YYYY").locale('pt-br').fromNow()}</TableCell>
+                <TableCell align="right">
+
+                  {moment(product.finish_date,"DD/MM/YYYY").locale('pt-br').fromNow()}</TableCell>
 
 
               <TableCell align="right">{
