@@ -23,32 +23,32 @@ const useStyles = makeStyles({
 
 export default function SimpleTable() {
   const classes = useStyles();
-  const [products, setProducts] = useState([]);
+  const [contracts, setcontracts] = useState([]);
   const [test, setTest] = useState([]);
 
   useEffect(() => {
     async function loadItems() {
       const response = await api.get("/table");
       
-      setProducts(response.data.contracts);
+      setcontracts(response.data.contracts);
       setTest(response.data.days);
       
     }
     loadItems();
   }, []);
-  // const rows = products.map((product) =>
+  // const rows = contracts.map((contract) =>
   //   [
     //     createData(
-      //       product.name, product.sku, product.endereco, product.quantity
+      //       contract.name, contract.sku, contract.endereco, contract.quantity
       //     )
       //   ]);
       
       // moment.locale('pt-br')
-      console.log('OPA',products);
+      console.log('OPA',contracts);
       console.log('OPA2',test);
-      // console.log(new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRA' }).format(products.value_global));
+      // console.log(new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRA' }).format(contracts.value_global));
       
-      // const array3= [...products,...test];
+      // const array3= [...contracts,...test];
       // const today = moment();
       // console.log(array3);
       return (
@@ -68,31 +68,36 @@ export default function SimpleTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {products.map((product) => (
+          {contracts.map((contract) => (
             
-            <TableRow key={product.id}>
-              <TableCell component="th" scope="row">{product.hired.name}<p>
-                {product.contract}
+            <TableRow key={contract.id}>
+              <TableCell component="th" scope="row">{contract.hired.name}<p>
+                {contract.contract}
                 </p>
                 </TableCell>
-              <TableCell align="justify">{product.object}</TableCell>
-              <TableCell align="right">{product.finish_date}</TableCell>
+              <TableCell align="justify">{contract.object}</TableCell>
+              <TableCell align="right">{contract.finish_date}</TableCell>
 
                 <TableCell align="right">
 
-                  {moment(product.finish_date,"DD/MM/YYYY").locale('pt-br').fromNow()}</TableCell>
+                  { /* {moment(contract.finish_date,"DD/MM/YYYY").locale('pt-br').fromNow(false)} */ }
+                  {moment(contract.finish_date,"DD/MM/YYYY").locale('pt-br').fromNow()}
+                  
+                  {/* // .fromNow(false) */}
+                  
+                  </TableCell>
 
 
               <TableCell align="right">{
-                // product.value_global
-                new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(product.value_global).trim()
+                // contract.value_global
+                new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(contract.value_global).trim()
               }</TableCell>
               <TableCell align="right">
-          {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL'  }).format(product.value_monthly).trim()}
+          {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL'  }).format(contract.value_monthly).trim()}
                 </TableCell>
-              <TableCell align="right">{product.supervisor}</TableCell>
-              <TableCell align="right">{product.status}</TableCell>
-              <TableCell align="right">{product.modality}</TableCell>
+              <TableCell align="right">{contract.supervisor}</TableCell>
+              <TableCell align="right">{contract.status}</TableCell>
+              <TableCell align="right">{contract.modality}</TableCell>
             </TableRow>
           ))}
         </TableBody>

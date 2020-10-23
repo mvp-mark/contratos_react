@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -11,7 +11,13 @@ import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
+import { useHistory } from "react-router-dom";
+
 import { makeStyles } from '@material-ui/core/styles';
+import api from '../services/api';
+import AuthService from '../services/auth.service';
+
+
 
 function Copyright() {
   return (
@@ -57,9 +63,30 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
+
+
 export default function SignInSide() {
   const classes = useStyles();
+  const [username, setUsername] = useState('');
+const [password, setPassword] = useState('');
+const [loading, setLoading] = useState(true);
+const history = useHistory();
 
+async function handleSignIn(e) {
+  e.preventDefault();
+    const response = await api.post("/login", { username, password })
+
+        AuthService.login(username, password).then(() => {
+        history.push("/Produtos");
+        window.location.reload();
+      })
+  // } catch (err) {
+  //   // this.setState({
+  //     console.log('cookie?',err);
+  //   alert("Houve um problema com o login, verifique suas credenciais. T.T");
+  // }
+}
   return (
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
@@ -72,28 +99,30 @@ export default function SignInSide() {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <form className={classes.form} noValidate>
+          <form className={classes.form} onSubmit={handleSignIn}>
             <TextField
               variant="outlined"
               margin="normal"
               required
               fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
+              id="username"
+              label="Username"
+              value={username}
+              autoComplete="username"
               autoFocus
-            />
+              onChange={(e) => setUsername(e.target.value)}
+              />
             <TextField
               variant="outlined"
               margin="normal"
               required
               fullWidth
-              name="password"
+              value={password}
               label="Password"
               type="password"
               id="password"
               autoComplete="current-password"
+              onChange={(e) => setPassword(e.target.value)}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
@@ -104,7 +133,7 @@ export default function SignInSide() {
               fullWidth
               variant="contained"
               color="primary"
-              href="/Produtos"
+              // href="/Produtos"
               className={classes.submit}
             >
               Sign In
